@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/home.css">
+    <title>Home</title>
+</head>
+<body>
+<div class="header">
+    <a href="/"><img src="/static/logo.png" alt=""></a>
+    <h1>Controle de estoque</h1>
+</div>
+
+<div class="main">
+    <div class="sidebar">
+        <ul class="menu">
+            <li>
+                <a href="{{ url_for('test') }}">
+                    <div class="menu-itens">
+                        <img src="/static/home.png">
+                        Dashboard
+                    </div>
+                </a>
+            </li>
+            <li>
+                <div class="menu-itens">
+                    <img src="/static/home.png">
+                    <a href="{{ url_for('exemplo') }}">Clientes</a>
+                </div>
+            </li>
+            <li>
+                <div class="menu-itens">
+                    <img src="/static/home.png">
+                    <a href="{{ url_for('test') }}">Produtos</a>
+                </div>
+            </li>
+            <li>
+                <div class="menu-itens">
+                    <img src="/static/home.png">
+                    <a href="{{ url_for('test') }}">Estoque</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="block">
+        {% block test %}
+
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

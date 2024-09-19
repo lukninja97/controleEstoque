@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Página com Header, Menu e Content</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: Arial, sans-serif;
+            height: 100%;
+        }
+
+        /* Estilizando o header */
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* Estilos para o layout principal */
+        .container {
+            display: flex;
+            height: calc(100% - 86px);
+        }
+
+        /* Estilizando o menu vertical */
+        nav {
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+        }
+
+        nav a {
+            display: block;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        /* Estilizando a área de conteúdo */
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Meu Website</h1>
+        <p>Bem-vindo ao meu site de exemplo</p>
+    </header>
+
+    <div class="container">
+        <!-- Menu vertical -->
+        <nav>
+            <a href="#">Início</a>
+            <a href="#">Sobre</a>
+            <a href="#">Serviços</a>
+            <a href="#">Contato</a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <div class="content">
+            <h2>Título do Conteúdo</h2>
+            <p>Aqui é onde o conteúdo principal será exibido. Você pode adicionar textos, imagens, vídeos ou qualquer outro elemento HTML aqui.</p>
+        </div>
+    </div>
+
+</body>
+</html>
