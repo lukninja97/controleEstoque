@@ -13,14 +13,34 @@ def home_css():
     return render_template('home.html')
 
 
-@app.route('/test')
-def test():
-    return render_template('block.html')
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboards.html')
 
 
-@app.route('/clientes')
-def clientes():
-    return render_template('exemplo.html')
+@app.route('/categorias')
+def categorias():
+    return render_template('categorias.html')
+
+
+@app.route('/produtos')
+def produtos():
+    return render_template('produtos.html')
+
+
+@app.route('/entradas')
+def entradas():
+    return render_template('entradas.html')
+
+
+@app.route('/saidas')
+def saidas():
+    return render_template('saidas.html')
+
+
+@app.route('/historico')
+def historico():
+    return render_template('historico.html')
 
 
 @app.route('/bootstrap')

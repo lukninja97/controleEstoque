@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="header">
-    <a href="/"><img src="/static/logo.png" alt=""></a>
+    <a href="/css"><img src="/static/logo.png" alt=""></a>
     <h1>Controle de estoque</h1>
 </div>
 
@@ -17,7 +17,7 @@
     <div class="sidebar">
         <ul class="menu">
             <li>
-                <a href="{{ url_for('test') }}">
+                <a href="{{ url_for('dashboard') }}">
                     <div class="menu-itens">
                         <img src="/static/home.png">
                         <p>Dashboard</p>
@@ -26,26 +26,42 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('clientes') }}">
+                <a href="{{ url_for('categorias') }}">
                     <div class="menu-itens">
-                        <img src="/static/home.png">
-                        <p>Clientes</p>
+                        <img src="/static/categoria.png">
+                        <p>Categorias</p>
                     </div>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('test') }}">
+                <a href="{{ url_for('produtos') }}">
                     <div class="menu-itens">
-                        <img src="/static/home.png">
+                        <img src="/static/produto.png">
                         <p>Produtos</p>
                     </div>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('test') }}">
+                <a href="{{ url_for('entradas') }}">
                     <div class="menu-itens">
-                        <img src="/static/home.png">
-                        <p>Estoque</p>
+                        <img src="/static/entrada.png">
+                        <p>Entradas</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('saidas') }}">
+                    <div class="menu-itens">
+                        <img src="/static/saida.png">
+                        <p>Saídas</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('historico') }}">
+                    <div class="menu-itens">
+                        <img src="/static/time.png">
+                        <p>Histórico</p>
                     </div>
                 </a>
             </li>
@@ -53,7 +69,7 @@
     </div>
 
     <div class="block">
-        {% block test %}
+        {% block content %}
 
         {% endblock %}
     </div>

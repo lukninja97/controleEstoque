@@ -72,3 +72,11 @@ li img {
 a:hover {
     background-color: #b4e394;
 }
+
+h1 {
+    font-family: sans-serif;
+}
+
+p {
+    font-family: Arial, sans-serif;
+}
