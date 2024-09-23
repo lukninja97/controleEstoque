@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/home.css">
     <title>Home</title>
+    <link rel="shortcut icon" type="imagex/png" href="/static/logo.ico">
 </head>
 <body>
 <div class="header">
@@ -19,27 +20,34 @@
                 <a href="{{ url_for('test') }}">
                     <div class="menu-itens">
                         <img src="/static/home.png">
-                        Dashboard
+                        <p>Dashboard</p>
+                    </div>
+
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('clientes') }}">
+                    <div class="menu-itens">
+                        <img src="/static/home.png">
+                        <p>Clientes</p>
                     </div>
                 </a>
             </li>
             <li>
-                <div class="menu-itens">
-                    <img src="/static/home.png">
-                    <a href="{{ url_for('exemplo') }}">Clientes</a>
-                </div>
+                <a href="{{ url_for('test') }}">
+                    <div class="menu-itens">
+                        <img src="/static/home.png">
+                        <p>Produtos</p>
+                    </div>
+                </a>
             </li>
             <li>
-                <div class="menu-itens">
-                    <img src="/static/home.png">
-                    <a href="{{ url_for('test') }}">Produtos</a>
-                </div>
-            </li>
-            <li>
-                <div class="menu-itens">
-                    <img src="/static/home.png">
-                    <a href="{{ url_for('test') }}">Estoque</a>
-                </div>
+                <a href="{{ url_for('test') }}">
+                    <div class="menu-itens">
+                        <img src="/static/home.png">
+                        <p>Estoque</p>
+                    </div>
+                </a>
             </li>
         </ul>
     </div>
