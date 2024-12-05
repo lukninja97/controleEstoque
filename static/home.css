@@ -26,6 +26,7 @@
     display: flex;
     flex-direction: row;
     background-color: black;
+    font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
 }
 
 .sidebar {
@@ -34,7 +35,6 @@
     font-weight: bold;
     display: flex;
     flex-direction: column;
-    font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
 }
 
 .menu-itens {
@@ -51,7 +51,7 @@
 
 .block {
     width: 100%;
-    background-color: lightgray;
+    background-color: white;
     padding: 5px;
 }
 
@@ -65,18 +65,137 @@ li a {
 li img {
     height: 24px;
     width: 24px;
-  /*   margin: 5px     0       50px    5px;
-               top - rigth - bottom - left*/
+    /*   margin: 5px     0       50px    5px;
+                 top - rigth - bottom - left*/
 }
 
-a:hover {
+li a:hover {
     background-color: #b4e394;
 }
 
-h1 {
-    font-family: sans-serif;
+h1, h2 {
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 p {
     font-family: Arial, sans-serif;
+}
+
+table {
+    width: 50%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    float: left;
+}
+
+td, th {
+    padding: 8px;
+    border: 1px solid;
+}
+
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #add250;
+    color: white;
+    font-weight: bold;
+    border: 1px solid black;
+}
+
+tr:nth-child(even) {
+    background-color: darkgray;
+}
+
+tr:hover {
+    background-color: gray;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+}
+
+h2 {
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px;
+    margin: 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    float: right;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+button a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    padding: 8px;
+}
+
+.horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.horizontal button{
+    width: 50%;
+    margin: 0 10px;
+}
+
+.horizontal input {
+    width: 25%;
+    margin: 10px;
+}
+
+.flash-error {
+    display: block;
+    border-radius: 10px;
+    border: 2px solid #af4c4c;
+    background-color: #e4a8a8;
+    padding: 20px;
+}
+
+.flash-success {
+    display: block;
+    border-radius: 10px;
+    border: 2px solid #4CAF50;
+    background-color: #b4e394;
+    padding: 20px;
 }

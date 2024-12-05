@@ -1,0 +1,41 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    <h2>Cadastro de usuário</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-error">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+
+    <form action="{{ url_for('inserir_usuario') }}" method="post">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" name="form_nome">
+
+        <label for="sobrenome">Sobrenome</label>
+        <input id="sobrenome" type="text" name="form_sobrenome">
+
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text" name="form_cpf">
+
+        <label for="admin">Admin</label>
+        <div class="horizontal">
+            <input id="admin" type="radio" name="form_admin" value="True">Sim
+            <input id="admin" type="radio" name="form_admin" value="False" checked>Não
+        </div>
+
+
+        <div class="horizontal">
+            <button><a href="{{ url_for('usuarios') }}">Cancelar</a></button>
+            <button>Adicionar</button>
+        </div>
+
+    </form>
+{% endblock %}

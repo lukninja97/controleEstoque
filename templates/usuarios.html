@@ -1,0 +1,50 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    <div class="title">
+        <h2>{{ test }} Usuários</h2>
+
+        {%- for msg in get_flashed_messages() -%}
+            <div class="flash-error">
+                {{ msg }}
+            </div>
+        {% endfor %}
+
+        <a class="button" href="{{ url_for('inserir_usuario') }}">Adicionar</a>
+
+
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Sobrenome</th>
+            <th>CPF</th>
+            <th>Admin</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.nome }}</td>
+                <td>{{ user.sobrenome }}</td>
+                <td>{{ user.cpf }}</td>
+                <td>{{ user.admin }}</td>
+                <td><a href="{{ url_for('editar_usuario', id_usuario = user.id) }}">Editar</a></td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{#    <select>#}
+{#        {% for categoria in categorias %}#}
+{#        	<option value="{{ categoria.id }}">{{ categoria.nome }}</option>#}
+{#        {% endfor %}#}
+{##}
+{#    </select>#}
+{% endblock %}

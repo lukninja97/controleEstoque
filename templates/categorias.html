@@ -2,4 +2,30 @@
 
 {% block content %}
     <h2>Categorias</h2>
+
+    <table>
+        <tr>
+            <th class="id">Id</th>
+            <th>Nome</th>
+        </tr>
+        <tr>
+            <td class="id">00000</td>
+            <td>Celular</td>
+        </tr>
+        <tr>
+            <td class="id">2</td>
+            <td>Monitor</td>
+        </tr>
+        <tr>
+            <td class="id">3</td>
+            <td>Periferico</td>
+        </tr>
+    {% for item in lista %}
+    	<tr>
+            <td class="id">item.id</td>
+            <td>item.nome</td>
+        </tr>
+    {% endfor %}
+
+    </table>
 {% endblock %}
