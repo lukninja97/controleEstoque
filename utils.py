@@ -26,8 +26,9 @@ def listar_users():
 
 
 def get_users():
-    users = select(User)
-    users = db_session.execute(users).all()
+    sel_users = select(User)
+    print(sel_users)
+    users = db_session.execute(sel_users).scalars().all()
     return users
 
 
@@ -65,47 +66,47 @@ def menu(table):
     action_select = input('Escolha o numero da ação desejada: ')
     return action_select
 
+def menu():
+    while True:
+        print('')
+        print('Tabelas do banco')
+        print('0 - Sair')
+        print('1 - User')
+        print('2 - Produto')
+        print('3 - Categoria')
+        print('4 - Movimentação')
+        option = input('Escolha o numero da tabela desejada: ')
 
-while True:
-    print('')
-    print('Tabelas do banco')
-    print('0 - Sair')
-    print('1 - User')
-    print('2 - Produto')
-    print('3 - Categoria')
-    print('4 - Movimentação')
-    option = input('Escolha o numero da tabela desejada: ')
-
-    if option == '1':
-        action = menu('User')
-
-        while action != '0':
-            if action == '1':
-                inserir_user()
-            elif action == '2':
-                listar_users()
-            elif action == '3':
-                atualizar_user()
-            elif action == '4':
-                deletar_user()
-            else:
-                break
+        if option == '1':
             action = menu('User')
-    elif option == '2':
-        while menu('Produto') != '0':
-            if action == '1':
-                inserir_user()
-            elif action == '2':
-                listar_users()
-            elif action == '3':
-                atualizar_user()
-            elif action == '4':
-                deletar_user()
-            else:
-                break
-    elif option == '3':
-        menu('Categoria')
-    elif option == '4':
-        menu('Movimentacao')
-    else:
-        break
+
+            while action != '0':
+                if action == '1':
+                    inserir_user()
+                elif action == '2':
+                    listar_users()
+                elif action == '3':
+                    atualizar_user()
+                elif action == '4':
+                    deletar_user()
+                else:
+                    break
+                action = menu('User')
+        elif option == '2':
+            while menu('Produto') != '0':
+                if action == '1':
+                    inserir_user()
+                elif action == '2':
+                    listar_users()
+                elif action == '3':
+                    atualizar_user()
+                elif action == '4':
+                    deletar_user()
+                else:
+                    break
+        elif option == '3':
+            menu('Categoria')
+        elif option == '4':
+            menu('Movimentacao')
+        else:
+            break

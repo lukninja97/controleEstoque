@@ -1,0 +1,93 @@
+{% extends 'home_bootstrap.html' %}
+
+{% block content %}
+    <div class="d-flex justify-content-between ms-3">
+        <h2>Cadastro de usuário</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-error">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+
+    <form action="{{ url_for('inserir_usuario') }}" method="post"
+          class="form d-flex flex-column border m-4 p-4 rounded w-50">
+
+        {% if mode == "i" %}
+
+            <label for="nome" class="form-label">
+                Nome
+                <input id="nome" type="text" name="form_nome" class="form-control" placeholder="Digite o seu nome">
+            </label>
+
+            <label for="sobrenome" class="form-label">
+                Sobrenome
+                <input id="sobrenome" type="text" name="form_sobrenome" class="form-control"
+                       placeholder="Digite o seu sobrenome">
+            </label>
+
+            <label for="cpf" class="form-label">
+                CPF
+                <input id="cpf" type="text" name="form_cpf" class="form-control" placeholder="Digite o seu CPF">
+            </label>
+
+            <label for="admin" class="form-label">
+                Papel
+                <div class="d-flex gap-3">
+                    <input id="admin" type="radio" name="form_admin" value="True" class="form-check-input">Admin
+                    <input id="admin" type="radio" name="form_admin" value="False" checked class="form-check-input">
+                    Usuário
+                </div>
+            </label>
+        {% else %}
+
+            <label for="nome" class="form-label">
+                Nome
+                <input id="nome" type="text" name="form_nome" class="form-control" placeholder="Digite o seu nome"
+                       value={{ user.nome }}>
+            </label>
+
+            <label for="sobrenome" class="form-label">
+                Sobrenome
+                <input id="sobrenome" type="text" name="form_sobrenome" class="form-control"
+                       placeholder="Digite o seu sobrenome" value={{ user.sobrenome }}>
+            </label>
+
+            <label for="cpf" class="form-label">
+                CPF
+                <input id="cpf" type="text" name="form_cpf" class="form-control" placeholder="Digite o seu CPF"
+                       value={{ user.cpf }}>
+            </label>
+
+            <label for="admin" class="form-label">
+                Papel
+                <div class="d-flex gap-3">
+                    {% if user.admin %}
+                        <input id="admin" type="radio" name="form_admin" value="True" checked class="form-check-input">
+                        Admin
+                        <input id="admin" type="radio" name="form_admin" value="False" class="form-check-input">Usuário
+                    {% else %}
+                        <input id="admin" type="radio" name="form_admin" value="True" class="form-check-input">Admin
+                        <input id="admin" type="radio" name="form_admin" value="False" checked class="form-check-input">
+                        Usuário
+                    {% endif %}
+
+                </div>
+            </label>
+
+        {% endif %}
+
+
+        <div class="d-flex gap-3 mt-3">
+            <a href="{{ url_for('listar_usuarios') }}" class="btn btn-warning">Cancelar</a>
+            <button class="btn btn-success">Adicionar</button>
+        </div>
+
+    </form>
+{% endblock %}

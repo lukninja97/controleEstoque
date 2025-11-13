@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop de Programação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .game-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .primary-button {
+            background-color: #3b82f6;
+            color: #ffffff;
+        }
+        .primary-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+        .secondary-button {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .secondary-button:hover {
+            background-color: #d1d5db;
+            transform: translateY(-2px);
+        }
+        .selected-topic-button {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+        .stop-button {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+        .stop-button:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+        .card {
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+        .card-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        #message-box {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1000;
+        }
+        #message-box.show {
+            opacity: 1;
+        }
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ranking-table th, .ranking-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .ranking-table th {
+            font-weight: bold;
+            background-color: #f1f5f9;
+            color: #4b5563;
+        }
+        .ranking-table tr.gold-row {
+            background-color: #FFD70033; /* Ouro */
+        }
+        .ranking-table tr.silver-row {
+            background-color: #C0C0C033; /* Prata */
+        }
+        .ranking-table tr.bronze-row {
+            background-color: #CD7F3233; /* Bronze */
+        }
+        .score-control-button {
+            background: #e2e8f0;
+            color: #1e293b;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .score-control-button:hover {
+            background: #cbd5e1;
+        }
+        .penalty-text {
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container">
+        <div class="game-area">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Stop de Programação</h1>
+            <p class="text-gray-600 mb-6">Teste suas habilidades resolvendo um exercício rápido!</p>
+
+            <!-- Botões de seleção de tema principal -->
+            <div id="topic-controls" class="mb-6">
+                <h2 class="text-xl font-bold mb-2">Selecione um Tema:</h2>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="htmlCssButton" class="button secondary-button">HTML e CSS</button>
+                    <button id="pythonButton" class="button secondary-button">Python</button>
+                </div>
+            </div>
+
+            <!-- Botões de subtema para HTML e CSS -->
+            <div id="subtopic-controls" class="mb-6 hidden">
+                <h2 class="text-xl font-bold mb-2">Selecione um Subtema:</h2>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
+                        <button id="textoButton" class="button secondary-button">Texto</button>
+                        <button id="layoutButton" class="button secondary-button">Layout (Div)</button>
+                        <button id="formButton" class="button secondary-button">Formulário</button>
+                        <button id="mediaButton" class="button secondary-button">Mídia</button>
+                </div>
+            </div>
+
+            <div id="game-controls" class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button id="startButton" class="button primary-button hidden">Sortear Exercício</button>
+                <button id="stopButton" class="button stop-button hidden">STOP!</button>
+                <button id="newExerciseButton" class="button primary-button hidden">Sortear Novamente</button>
+            </div>
+
+            <div id="exercise-card" class="card hidden">
+                <div class="card-title text-gray-800">Exercício</div>
+                <p id="exercise-text" class="text-gray-700"></p>
+                <p id="exercise-score" class="text-sm text-gray-500 mt-2"></p>
+                <p id="penalty-display" class="text-sm mt-1 text-red-500 font-bold hidden"></p>
+            </div>
+
+        </div>
+
+        <!-- Ranking Section -->
+        <div class="ranking-area">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Ranking de Alunos</h2>
+            <p class="text-gray-600 text-sm mb-4">Clique nos botões +/- para ajustar a pontuação manualmente. O ranking será atualizado.</p>
+            <div class="flex justify-end mb-4">
+                <button id="saveRankingButton" class="button primary-button text-sm">Salvar Ranking</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table id="ranking-table" class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Posição</th>
+                            <th class="text-left">Nome</th>
+                            <th class="text-right">Pontuação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-body">
+                        <!-- Ranking será populado aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="message-box" class="hidden"></div>
+    </div>
+
+    <script type="text/javascript">
+        // UI Elements
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const newExerciseButton = document.getElementById('newExerciseButton');
+        const htmlCssButton = document.getElementById('htmlCssButton');
+        const pythonButton = document.getElementById('pythonButton');
+        const subtopicControls = document.getElementById('subtopic-controls');
+        const topicButtons = document.querySelectorAll('#topic-controls .button');
+        const subtopicButtons = document.querySelectorAll('#subtopic-controls .button');
+        const exerciseCard = document.getElementById('exercise-card');
+        const exerciseText = document.getElementById('exercise-text');
+        const exerciseScoreDisplay = document.getElementById('exercise-score');
+        const penaltyDisplay = document.getElementById('penalty-display');
+        const messageBox = document.getElementById('message-box');
+        const rankingBody = document.getElementById('ranking-body');
+        const saveRankingButton = document.getElementById('saveRankingButton');
+
+        // Game State
+        let currentTopic = null;
+        let currentExerciseScore = 0; // Armazena a pontuação do exercício atual
+
+        // Estrutura de exercícios com pontuação baseada na dificuldade
+        const exercises = {
+            'html-css-texto': [
+                { text: "Crie uma página HTML com um cabeçalho (h1) e um parágrafo. O cabeçalho deve ser azul e o parágrafo, vermelho.", score: 5 },
+                { text: "Adicione um span dentro de um parágrafo. O span deve ter um `font-weight: bold` e uma cor de fundo amarela.", score: 5 },
+                { text: "Crie uma lista não ordenada (ul) e use `list-decoration` no CSS para remover os marcadores de lista.", score: 5 },
+                { text: "Defina o tamanho da fonte para 36px em um elemento `p` e deixe centralizado.", score: 5 },
+                { text: "Crie uma página com um link para o Google e estilize-o para que não tenha sublinhado.", score: 5 },
+                { text: "Use `text-transform: uppercase` para transformar o texto de um parágrafo em maiúsculas.", score: 5 },
+                { text: "Crie um parágrafo e deixe sublinhado e em negrito, estilize a cor do texto para branco e a cor do fundo para preto.", score: 5 },
+                { text: "Crie um parágrafo com a classe 'destaque' e defina a cor do texto para `#333` e a cor de fundo para `#f0f0f0`.", score: 5 },
+                { text: "Use a tag `em` para enfatizar uma palavra em uma frase e estilize-a com uma cor diferente.", score: 5 },
+                { text: "Crie um parágrafo e use a propriedade `line-height` para aumentar o espaçamento entre as linhas em 20px.", score: 5 }
+            ],
+            'html-css-layout': [
+                { text: "Crie uma div principal com 80% de largura e centralize-a na página. Dentro, adicione três divs secundárias usando Flexbox para que fiquem lado a lado.", score: 10 },
+                { text: "Desenvolva um layout de duas colunas usando `display: grid`. A primeira coluna deve ter 30% e a segunda, 70% da largura.", score: 10 },
+                { text: "Crie um rodapé fixo na parte inferior da tela, com um background cinza escuro e padding de 1rem.", score: 10 },
+                { text: "Crie um contêiner com `display: flex` e use `justify-content: space-around` para distribuir o espaço entre os itens.", score: 10 },
+                { text: "Use `position: absolute` para posicionar uma `div` no canto superior direito da tela.", score: 10 },
+                { text: "Crie um layout de 4 colunas com Grid e use `gap` para adicionar espaçamento entre as células.", score: 10 },
+                { text: "Adicione uma barra de navegação no topo da página usando `position: fixed`.", score: 10 },
+                { text: "Crie um layout de cartão (card) com uma imagem no topo e texto na parte inferior, usando Flexbox para organizar os elementos.", score: 10 },
+                { text: "Use `float: left` para fazer com que uma imagem e o texto ao lado dela se alinhem.", score: 10 },
+                { text: "Crie um contêiner com `display: flex` e use `align-items: center` para centralizar verticalmente os itens.", score: 10 }
+            ],
+            'html-css-form': [
+                { text: "Crie um formulário simples com campos de `input` para nome e e-mail. Adicione um `label` para cada campo.", score: 10 },
+                { text: "Desenvolva um botão de envio para o formulário. Use CSS para dar a ele uma cor de fundo verde e um `hover` que mude a opacidade.", score: 10 },
+                { text: "Crie um `textarea` com bordas arredondadas e um `placeholder` com o texto 'Digite sua mensagem aqui'.", score: 10 },
+                { text: "Adicione um campo de senha (`type=\"password\"`) e use CSS para estilizar a borda.", score: 10 },
+                { text: "Crie um grupo de botões de rádio para escolher um sabor de pizza. Use um `fieldset` para agrupar as opções.", score: 10 },
+                { text: "Adicione um checkbox com a label 'Aceito os termos'. Use `cursor: pointer` na label.", score: 10 },
+                { text: "Crie um campo de seleção (`select`) com pelo menos três opções de cidades.", score: 10 },
+                { text: "Adicione um `input` de tipo `date` e estilize-o para ter um `padding` de 10px.", score: 10 },
+                { text: "Use `required` em um campo de `input` para torná-lo obrigatório antes do envio do formulário.", score: 10 },
+                { text: "Estilize um formulário inteiro com um `padding` e um `box-shadow` para que pareça um cartão.", score: 10 }
+            ],
+            'html-css-media': [
+                { text: "Adicione uma imagem à página. Use CSS para definir sua largura para 300px e aplicar um `filter: grayscale(100%)`.", score: 10 },
+                { text: "Adicione um vídeo à página e use a propriedade `autoplay` para que ele comece a ser reproduzido automaticamente.", score: 10 },
+                { text: "Crie um elemento `figure` com uma imagem e uma legenda (`figcaption`).", score: 10 },
+                { text: "Adicione um áudio à página. Use o atributo `controls` para exibir os controles de reprodução.", score: 10 },
+                { text: "Use `object-fit: cover` para garantir que uma imagem preencha completamente seu contêiner sem distorção.", score: 10 },
+                { text: "Adicione uma imagem responsiva que use a propriedade `max-width: 100%` para se ajustar ao tamanho da tela.", score: 10 },
+                { text: "Use `background-image` em um elemento `div` e defina `background-position: center`.", score: 10 },
+                { text: "Crie uma galeria de fotos com três imagens usando Flexbox para organizá-las.", score: 10 },
+                { text: "Adicione uma imagem com `border-radius: 50%` para que ela se torne um círculo perfeito.", score: 10 },
+                { text: "Use a tag `<picture>` para exibir diferentes versões de uma imagem em diferentes tamanhos de tela.", score: 10 }
+            ],
+            'python': [
+                { text: "Escreva uma função em Python que receba uma lista de números e retorne o maior e o menor valor.", score: 20 },
+                { text: "Crie um script que peça o nome do usuário e, em seguida, imprima uma mensagem de boas-vindas.", score: 15 },
+                { text: "Desenvolva uma função que calcule o fatorial de um número inteiro positivo.", score: 20 },
+                { text: "Escreva um programa que verifique se um número é primo.", score: 20 },
+                { text: "Crie uma classe chamada 'Livro' com atributos 'titulo', 'autor' e 'paginas'. Adicione um método que imprima uma descrição do livro.", score: 25 }
+            ]
+        };
+
+        const initialRanking = [
+            { name: "Ana Beatriz", score: 0 },
+            { name: "Ana Carolina", score: 0 },
+            { name: "Ana Lyvia", score: 0 },
+            { name: "Diego", score: 0 },
+            { name: "Fernanda", score: 0 },
+            { name: "Fernando", score: 0 },
+            { name: "Gabriel", score: 0 },
+            { name: "Geovana", score: 0 },
+            { name: "Guilherme Henrique", score: 0 },
+            { name: "Guilherme Maurinho", score: 0 },
+            { name: "Guilherme Ramos", score: 0 },
+            { name: "Heitor Leite", score: 0 },
+            { name: "Heitor Martins", score: 0 },
+            { name: "Heitor Takase", score: 0 },
+            { name: "Hugo Henrique", score: 0 },
+            { name: "João Hélio", score: 0 },
+            { name: "João Pedro Dias", score: 0 },
+            { name: "João Pedro Soares", score: 0 },
+            { name: "Júlia", score: 0 },
+            { name: "Larah", score: 0 },
+            { name: "Lívia Conti", score: 0 },
+            { name: "Lívia Maria", score: 0 },
+            { name: "Lívia Parro", score: 0 },
+            { name: "Luiz Fernando", score: 0 },
+            { name: "Maria Vitória", score: 0 },
+            { name: "Miguel", score: 0 },
+            { name: "Pedro", score: 0 },
+            { name: "Rafael", score: 0 },
+            { name: "Ricardo", score: 0 },
+            { name: "Thayla", score: 0 },
+            { name: "Vitor Hugo", score: 0 },
+            { name: "Vitória", score: 0 }
+        ];
+
+        let staticRanking = [...initialRanking];
+
+        // --- UI Functions ---
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = 'show';
+            if (type === 'success') {
+                messageBox.style.backgroundColor = '#4CAF50';
+            } else if (type === 'error') {
+                messageBox.style.backgroundColor = '#f44336';
+            } else {
+                messageBox.style.backgroundColor = '#2196F3';
+            }
+            setTimeout(() => {
+                messageBox.className = 'hidden';
+            }, 3000);
+        }
+
+        function deselectButtons(buttons) {
+            buttons.forEach(button => button.classList.remove('selected-topic-button'));
+        }
+
+        function selectTopic(topic) {
+            deselectButtons(topicButtons);
+            deselectButtons(subtopicButtons);
+
+            if (topic === 'html-css') {
+                htmlCssButton.classList.add('selected-topic-button');
+                subtopicControls.classList.remove('hidden');
+                startButton.classList.add('hidden');
+            } else if (topic === 'python') {
+                pythonButton.classList.add('selected-topic-button');
+                subtopicControls.classList.add('hidden');
+                startButton.classList.remove('hidden');
+            }
+
+            currentTopic = topic;
+            showMessage(`Tema "${topic === 'html-css' ? 'HTML e CSS' : 'Python'}" selecionado!`, 'info');
+        }
+
+        function selectSubTopic(subtopic) {
+            deselectButtons(subtopicButtons);
+
+            const fullTopic = `html-css-${subtopic}`;
+            currentTopic = fullTopic;
+
+            document.getElementById(`${subtopic}Button`).classList.add('selected-topic-button');
+            startButton.classList.remove('hidden');
+
+            showMessage(`Subtema "${subtopic}" selecionado!`, 'info');
+        }
+
+        function startGame() {
+            if (!currentTopic || !exercises[currentTopic]) {
+                showMessage('Por favor, selecione um tema e/ou subtema antes de iniciar.', 'error');
+                return;
+            }
+
+            startButton.classList.add('hidden');
+            stopButton.classList.remove('hidden');
+            newExerciseButton.classList.add('hidden');
+            exerciseCard.classList.remove('hidden');
+
+            // Sorteia o objeto completo do exercício
+            const selectedExercises = exercises[currentTopic];
+            {#const randomIndex = Math.floor(Math.random() * selectedExercises.length);#}
+            let i = 0;
+            const selectedExercise = selectedExercises[i];
+            if (i < 10) {
+                i++;
+            }
+
+
+            currentExerciseScore = selectedExercise.score;
+            const penalty = currentExerciseScore * 2;
+
+            exerciseText.textContent = selectedExercise.text;
+            exerciseScoreDisplay.textContent = `Pontuação: ${currentExerciseScore}`;
+            penaltyDisplay.textContent = `Penalidade por erro: -${penalty} pontos`;
+            penaltyDisplay.classList.remove('hidden');
+
+            showMessage('Exercício sorteado!', 'success');
+        }
+
+        function stopGame() {
+            stopButton.classList.add('hidden');
+            newExerciseButton.classList.remove('hidden');
+            showMessage('Tempo esgotado! Verifique sua solução.', 'info');
+        }
+
+        function updateScore(index, delta) {
+            staticRanking[index].score += delta;
+            staticRanking.sort((a, b) => b.score - a.score);
+            renderStaticRanking(staticRanking);
+        }
+
+        function renderStaticRanking(players) {
+            rankingBody.innerHTML = '';
+            players.forEach((player, index) => {
+                const tr = document.createElement('tr');
+                let rowClass = '';
+                let medal = '';
+
+                // Adiciona a classe de cor para o pódio e o ícone de medalha
+                if (index === 0) {
+                    rowClass = 'gold-row';
+                    medal = '🥇';
+                } else if (index === 1) {
+                    rowClass = 'silver-row';
+                    medal = '🥈';
+                } else if (index === 2) {
+                    rowClass = 'bronze-row';
+                    medal = '🥉';
+                }
+                tr.className = rowClass;
+                tr.innerHTML = `
+                    <td class="text-center">${index + 1}</td>
+                    <td>${medal} ${player.name}</td>
+                    <td class="text-right flex items-center justify-end gap-2">
+                        <button class="score-control-button" onclick="updateScore(${staticRanking.indexOf(player)}, -1)">-</button>
+                        <span class="px-2">${player.score}</span>
+                        <button class="score-control-button" onclick="updateScore(${staticRanking.indexOf(player)}, 1)">+</button>
+                    </td>
+                `;
+                rankingBody.appendChild(tr);
+            });
+        }
+
+        function saveRanking() {
+            try {
+                localStorage.setItem('stop_ranking', JSON.stringify(staticRanking));
+                showMessage('Ranking salvo com sucesso!', 'success');
+            } catch (e) {
+                showMessage('Erro ao salvar o ranking.', 'error');
+            }
+        }
+
+        function loadRanking() {
+            try {
+                const savedRanking = localStorage.getItem('stop_ranking');
+                if (savedRanking) {
+                    staticRanking = JSON.parse(savedRanking);
+                } else {
+                    staticRanking = [...initialRanking];
+                }
+            } catch (e) {
+                showMessage('Erro ao carregar o ranking salvo. Usando o ranking padrão.', 'error');
+                staticRanking = [...initialRanking];
+            }
+        }
+
+        // --- Event Listeners ---
+        htmlCssButton.addEventListener('click', () => selectTopic('html-css'));
+        pythonButton.addEventListener('click', () => selectTopic('python'));
+
+        document.getElementById('textoButton').addEventListener('click', () => selectSubTopic('texto'));
+        document.getElementById('layoutButton').addEventListener('click', () => selectSubTopic('layout'));
+        document.getElementById('formButton').addEventListener('click', () => selectSubTopic('form'));
+        document.getElementById('mediaButton').addEventListener('click', () => selectSubTopic('media'));
+
+        startButton.addEventListener('click', startGame);
+        stopButton.addEventListener('click', stopGame);
+        newExerciseButton.addEventListener('click', startGame);
+        saveRankingButton.addEventListener('click', saveRanking);
+
+        // Render the static ranking on page load
+        window.onload = () => {
+            loadRanking();
+            renderStaticRanking(staticRanking);
+        };
+    </script>
+</body>
+</html>

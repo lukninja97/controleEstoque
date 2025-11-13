@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+body {
+    height: 100vh;
+}
+
 .header {
     height: 60px;
     background-color: #4d6c35;

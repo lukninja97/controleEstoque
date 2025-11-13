@@ -1,54 +1,93 @@
-import random
-
 from flask import Flask, render_template, redirect, url_for, request, flash
 from sqlalchemy import select, text, func
 
 from models import *
+from utils import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'shhhhh'
 
+tema = ""
+user_on = ""
 
-@app.route('/')
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('login.html')
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        form_cpf = request.form['form_cpf']
+        form_senha = request.form['form_senha']
+
+        # Procura no banco se ja existe o cpf digitado
+        user_cpf = select(User).where(User.cpf == form_cpf)
+
+        user = db_session.execute(user_cpf).scalars().first()
+
+        if user.senha == form_senha:
+            flash("Login realizado com sucesso")
+            global user_on
+            user_on = user
+            return redirect(url_for('inicial'))
+
+    return render_template('login.html')
+
+@app.route('/inicial')
 def inicial():
     return render_template('inicial.html')
 
+@app.route('/bootstrap')
+def bootstrap():
+    global tema
+    tema = 'bootstrap'
+    return redirect(url_for('home'))
 
 @app.route('/css')
-def home_css():
-    return render_template('home.html')
+def css():
+    global tema
+    tema = 'css'
+    return redirect(url_for('home'))
+
+@app.route('/home')
+def home():
+    print(tema)
+    if tema == 'css':
+        render_template('home.html')
+    else:
+        print(user_on)
+        render_template('home_bootstrap.html', user_on=user_on)
+
+    return redirect(url_for('dashboard'))
 
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboards.html')
+    users = get_users()
+
+
+    if tema == 'css':
+        return render_template('dashboards.html')
+    else:
+        return render_template('dashboard_bootstrap.html', user_on=user_on, all_users=len(users))
 
 
 @app.route('/usuarios')
-def usuarios():
-    # users = select(User)
-    # users = db_session.execute(users).scalars().all()
+def listar_usuarios():
 
-    # deu certo
-    count_user_sql = select(User)
-    count_user = db_session.execute(count_user_sql).scalars().all()
+    count_user = get_users()
     count = len(count_user)
     users = []
     for user in count_user:
         users.append(user.serialize_user())
 
-    # user_sql = text("SELECT SUM(user.id) AS qtd FROM user GROUP BY user.id")
-    # # sql = select(User).from_statement(user_sql)
-    # count = db_session.execute(user_sql).scalars().all()
-
     print(count)
-    return render_template('usuarios.html', users=users, test=count)
-
-
-def verifica_campos(campos):
-    for campo in campos:
-        if not request.form.get(campo):
-            return False
+    global tema
+    if tema == 'css':
+        return render_template('usuarios.html', users=users, test=count)
+    else:
+        return render_template('usuarios_bootstrap.html', user_on=user_on, users=users, test=count)
 
 
 @app.route('/usuario/inserir', methods=['POST', 'GET'])
@@ -83,20 +122,41 @@ def inserir_usuario():
                 user.save()
                 db_session.close()
                 flash("Usuario cadastrado com sucesso", "success")
-                return redirect(url_for('usuarios'))
+                return redirect(url_for('listar_usuarios'))
             else:
                 flash("O CPF já existe")
 
     # Renderiza a pagina do formulario
-    return render_template('form_usuario.html')
+    global tema
+    if tema == 'css':
+        return render_template('form_usuario.html')
+    else:
+        return render_template('form_usuario_bootstrap.html', mode="i", user_on=user_on)
 
 
 @app.route('/usuario/editar/<int:id_usuario>', methods=['POST', 'GET'])
 def editar_usuario(id_usuario):
     user_sql = select(User).where(User.id == id_usuario)
-    user = db_session.execute(user_sql).scalars().first()
+    user = db_session.execute(user_sql).scalar()
+    print(user)
     if request.method == 'POST':
         print()
+
+    global tema
+    if tema == 'css':
+        return render_template('form_usuario.html', user=user)
+    else:
+        return render_template('form_usuario_bootstrap.html', mode="u", user_on=user_on, user=user)
+
+@app.route('/usuario/deletar/<int:id_usuario>', methods=['POST', 'GET'])
+def deletar_usuario(id_usuario):
+    user_sql = select(User).where(User.id == id_usuario)
+    user = db_session.execute(user_sql).scalar()
+    if user:
+        user.delete()
+        flash("Usuario deletado com sucesso", "success")
+
+    return redirect(url_for('listar_usuarios'))
 
 
 @app.route('/categorias')
@@ -124,10 +184,5 @@ def historico():
     return render_template('historico.html')
 
 
-@app.route('/bootstrap')
-def bootstrap():
-    return render_template('')
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

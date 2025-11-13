@@ -16,9 +16,10 @@ class User(Base):
     sobrenome = Column(String(40), nullable=False, index=True)
     cpf = Column(String(14), nullable=False, index=True, unique=True)
     admin = Column(Boolean, nullable=False, default=False)
+    senha = Column(String(14), nullable=False, index=True)
 
     def __repr__(self):
-        return '<User: {} {} {}>'.format(self.nome, self.sobrenome, self.cpf)
+        return '<User: {} {} {} {}>'.format(self.nome, self.sobrenome, self.cpf, self.admin)
 
     def save(self):
         db_session.add(self)
@@ -34,7 +35,8 @@ class User(Base):
             'nome': self.nome,
             'sobrenome': self.sobrenome,
             'cpf': self.cpf,
-            'admin': self.admin
+            'admin': self.admin,
+            'senha': self.senha
         }
         return dados_user
 
